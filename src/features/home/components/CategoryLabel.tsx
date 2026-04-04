@@ -1,3 +1,6 @@
+/* Copyright (c) 2026, Yao Zeran
+ * 
+ * The book category label */
 
 
 const CategoryLabel = ({ name, image }: Readonly<{name: string, image: string}>) => {

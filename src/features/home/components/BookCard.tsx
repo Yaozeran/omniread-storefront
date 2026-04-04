@@ -1,3 +1,9 @@
+/* Copyright (c) 2026, Yao Zeran
+ * 
+ * The book card component that recommend a book to the user, used in the 
+ *   recommendation section of home page */
+
+
 import Image from "next/image";
 
 import { Book } from "@/types/book";

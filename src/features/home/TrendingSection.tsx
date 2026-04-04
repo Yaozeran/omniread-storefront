@@ -1,6 +1,6 @@
 /* Copyright (c) 2026, Yao Zeran
  * 
- *  */
+ * The trending book section of the home page */
 
 
 "use client";

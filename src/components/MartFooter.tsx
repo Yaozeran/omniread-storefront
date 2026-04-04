@@ -1,8 +1,9 @@
-"use client";
-
 /* Copyright (c) 2026 Yao Zeran
  * 
  * The mart pages' footer component. */
+
+
+"use client";
 
 
 import Link from "next/link";
