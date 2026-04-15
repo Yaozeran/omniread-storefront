@@ -1,6 +1,6 @@
 /* Copyright (c) 2026, Yao Zeran
  * 
- * The book related types and interfaces */
+ * The book related types and interfaces. */
 
 
 import type { StaticImageData } from "next/image";
@@ -28,8 +28,8 @@ export interface Book {
   seriesId?: number,
   
   // market info
-  paperPrice: number,
-  digitalPrice: number,  
+  paperPrice?: number,
+  digitalPrice?: number,  
 
   isSoldOut: boolean,
 }
@@ -55,4 +55,19 @@ export interface Category {
 export interface Bookshelf {
   books: Book[],
   bookCategoryMap: Record<number, Category>,
+}
+
+
+export type SaleType = 'paper' | 'digital';
+
+
+export interface CartItem {
+  id: number,
+
+	title: string,
+  coverImage: string,
+
+	type: SaleType,
+  price: number,
+	quantity: number,
 }
