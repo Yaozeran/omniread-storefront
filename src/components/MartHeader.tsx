@@ -4,22 +4,27 @@
 
 
 import Link from "next/link";
+import styles from "./MartHeader.module.css";
 
 
-const MartHeader: React.FC = () => {
+function MartHeader() {
   return (
-    <header className="flex flex-wrap items-center justify-between gap-4 border-b border-gray-300 px-4 py-4">
-      <div>Logo</div>
+    <header className={styles.header}>
+      <div className={styles.logo}>Logo</div>
       <input
         type="search"
         placeholder="Search for books"
-        className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:outline-none md:w-[300px]"
+        className={styles.searchInput}
       />
-      <div>
-        <Link href="/space">User</Link>
+      <div className={styles.linkGroup}>
+        <Link href="/space" className={styles.link}>
+          User
+        </Link>
       </div>
-      <div>
-        <Link href="/cart">Cart</Link>
+      <div className={styles.linkGroup}>
+        <Link href="/cart" className={styles.link}>
+          Cart
+        </Link>
       </div>
     </header>
   )

@@ -6,23 +6,21 @@
  *   the search by categories section  */
 
 
-import HomeProvider from "@/features/home/context/HomeProvider";
-
-import CategorySection from "@/features/home/CategorySection";
-import RecommendationSection from "@/features/home/RecommendationSection";
-import TrendingSection from "@/features/home/TrendingSection";
+import CategorySection from "@/features/home/components/CategorySection";
+import RecommendedSection from "@/features/home/components/RecommendationSection";
+import TrendingSection from "@/features/home/components/TrendingSection";
 
 
-const Home: React.FC = () => {
+async function Home() {
   return (
     <main className="flex flex-col gap-6 px-4 py-6 md:px-6 md:py-8">
-      <HomeProvider>
-        <TrendingSection />
-        <RecommendationSection />
-        <div>
-          <CategorySection />
-        </div>
-      </HomeProvider>
+
+      <TrendingSection />
+
+      <RecommendedSection />
+        
+      <CategorySection />
+      
     </main>
   );
 }

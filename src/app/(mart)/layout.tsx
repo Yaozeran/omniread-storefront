@@ -4,10 +4,12 @@
 
 
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
 
-import { MartProvider } from "@/features/mart/context/MartProvider";
+import { Geist, Geist_Mono } from "next/font/google";
+
+import "@/app/globals.css";
+
+import AuthProvider from "@/features/auth/context/AuthProvider";
 import MartHeader from "@/components/MartHeader";
 import MartFooter from "@/components/MartFooter";
 
@@ -30,25 +32,18 @@ export const metadata: Metadata = {
 };
 
 
-type LayoutProps = {
-  children: React.ReactNode,
-}
-const RootLayout: React.FC<LayoutProps> = ({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) => {
+function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <MartProvider>
+        <AuthProvider>
           <MartHeader />
           {children}
           <MartFooter />
-        </MartProvider>
+        </AuthProvider>
       </body>
     </html>
   );
