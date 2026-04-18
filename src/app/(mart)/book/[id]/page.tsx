@@ -8,14 +8,7 @@ import { fetchBookById } from "@/services";
 import ListedBook from "@/features/book/components/ListedBook";
 
 
-type Props = {
-  params : {
-    id: string,
-  },
-};
-
-
-async function BookPage({ params }: Props) {
+async function BookPage({ params }: Readonly<{ params : { id : string } }>) {
 
   const book = await fetchBookById(params.id);
 
