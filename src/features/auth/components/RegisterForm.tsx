@@ -1,17 +1,23 @@
+/* Copyright (c) 2026, Yao Zeran
+ * 
+ * The user account registration form component */
 
 
 "use client"
 
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import styles from "./RegisterForm.module.css";
 
-import { registerWithEmail, sendEmailVerificationCode } from "@/services/api/user";
+import { registerWithEmail, sendEmailVerificationCode } from "@/services/api/auth";
+import { useAuthContext } from "@/features/auth/context/AuthProvider";
 
 
 function RegisterForm() {
+
+  const { setUser } = useAuthContext();
 
   const router = useRouter();
   
@@ -19,16 +25,11 @@ function RegisterForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
-  const [role, setRole] = useState<"reader" | "author">("reader");
 
   const [sendingCode, setSendingCode] = useState(false);
   const [registering, setRegistering] = useState(false);
   const [codeSentMsg, setCodeSentMsg] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  const roleLabel = useMemo(() => {
-    return role === "author" ? "Writer" : "Reader";
-  }, [role]);
 
   async function onSendCode() {
     setError(null);
@@ -37,11 +38,10 @@ function RegisterForm() {
       setError("Please enter your email first.");
       return;
     }
-
     setSendingCode(true);
     try {
-      const result = await sendEmailVerificationCode(email);
-      setCodeSentMsg(`Verification code sent. It expires in ${result.expiresInSec} seconds.`);
+      const verificationCode = await sendEmailVerificationCode(email);
+      setCodeSentMsg(`Verification code sent. It expires in ${verificationCode.expiresInSec} seconds.`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to send verification code");
     } finally {
@@ -54,16 +54,16 @@ function RegisterForm() {
     setRegistering(true);
     setError(null);
     try {
-      await registerWithEmail({
+      const user = await registerWithEmail({
         name,
         email,
         password,
         verificationCode,
-        role,
       });
-      router.push("/login");
+      setUser(user);
+      router.push("/profile-setup");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to register");
+      setError(err instanceof Error ? err.message : "Failed to register: wrong verification code.");
     } finally {
       setRegistering(false);
     }
@@ -102,29 +102,19 @@ function RegisterForm() {
         />
       </div>
 
-      <div className={styles.roleGroup}>
-        <label className={styles.label}>Choose account type</label>
-        <div className={styles.roleGrid}>
-          <button
-            type="button"
-            onClick={() => setRole("reader")}
-            className={`${styles.roleButton} ${
-              role === "reader" ? styles.roleButtonActive : styles.roleButtonInactive
-            }`}
-          >
-            Reader
-          </button>
-          <button
-            type="button"
-            onClick={() => setRole("author")}
-            className={`${styles.roleButton} ${
-              role === "author" ? styles.roleButtonActive : styles.roleButtonInactive
-            }`}
-          >
-            Writer
-          </button>
-        </div>
-        <p className={styles.roleLabel}>Selected: {roleLabel}</p>
+      <div className={styles.fieldGroup}>
+        <label className={styles.label} htmlFor="email">
+          Password
+        </label>
+        <input
+          id="passowrd"
+          type="passowrd"
+          required
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className={styles.input}
+          placeholder="Your password"
+        />
       </div>
 
       <div className={styles.codeGroup}>

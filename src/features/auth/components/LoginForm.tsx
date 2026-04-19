@@ -1,6 +1,6 @@
 /* Copyright (c) 2026, Yao Zeran
  * 
- *   The user login page */
+ * The user login form component */
 
 
 "use client";
@@ -9,11 +9,16 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { loginWithEmail } from "@/services/api/user";
 import styles from "./LoginForm.module.css";
+
+import { useAuthContext } from "@/features/auth/context/AuthProvider";
+
+import { loginWithEmail } from "@/services/api/auth";
 
 
 function LoginForm() {
+
+  const { setUser } = useAuthContext();
 
   const router = useRouter();
 
@@ -27,14 +32,15 @@ function LoginForm() {
     setLoading(true);
     setError(null);
     try {
-      await loginWithEmail({ email, password });
-      router.push("/");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to login");
+      const user = await loginWithEmail({ email, password });
+      setUser(user);
+      router.push(user.profile ? "/" : "/profile-setup");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to login");
     } finally {
       setLoading(false);
     }
-  }
+  };
   
   return (
     <form className={styles.form} onSubmit={onSubmit}>

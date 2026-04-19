@@ -1,5 +1,10 @@
+/* Copyright (c) 2026, Yao Zeran
+ * 
+ * The login section component, containing a login form */
+
 
 import Link from "next/link";
+
 import LoginForm from "./LoginForm";
 
 
