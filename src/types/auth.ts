@@ -17,7 +17,7 @@ export interface EmailRegistrationPayload {
 }
 
 
-export interface EmailRegistrationResult {
+export interface SentVerificationCodeResponse {
   success: boolean;
   expiresInSec: number;
 }

@@ -6,25 +6,31 @@
 export type UserType = 'reader' | 'author';
 
 
-interface UserBase {
+export interface UserMetadata {
   id: string;
   email: string;
   name: string;
-  role?: 'reader' | 'author';
 }
 
 
-export interface Reader extends UserBase {
+export interface ReaderProfile {
   role: 'reader';
+  id: string;
+
+  subscribedUserIds?: string[];
 }
 
 
-export interface Author extends UserBase {
+export interface AuthorProfile {
   role: 'author';
+  id: string;
+
   penName: string;
   authorBio: string;
 
   authorIdentity?: AuthorIdentity; 
+
+  subscribedUserIds?: string[];
 }
 
 
@@ -35,4 +41,10 @@ export interface AuthorIdentity {
 }
 
 
-export type User = Reader | Author;
+export type UserProfile = ReaderProfile | AuthorProfile;
+
+
+export interface User {
+  metadata: UserMetadata;
+  profile?: UserProfile;
+}
