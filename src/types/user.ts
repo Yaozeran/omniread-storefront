@@ -10,6 +10,7 @@ interface UserBase {
   id: string;
   email: string;
   name: string;
+  role?: 'reader' | 'author';
 }
 
 
