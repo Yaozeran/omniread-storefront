@@ -6,13 +6,7 @@
 import { fetchBooksByCategoryName } from "@/services/api/book";
 
 
-type Props = {
-  params: {
-    name: string,
-  },
-};
-
-async function CategoryPage({ params }: Props) {
+async function CategoryPage({ params }: Readonly<{ params : { name : string } }>) {
 
   const books = await fetchBooksByCategoryName(params.name);
 
