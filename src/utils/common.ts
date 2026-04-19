@@ -1,9 +1,10 @@
 
 
-import type { MailMessage } from "@/types/user";
+import type { MailMessage } from "@/types/space";
 
 
-export function countUnreadMessages(messages: MailMessage[]) {
+export function countUnreadMails(messages: MailMessage[] | undefined) {
+	if (!messages) return 0;
 	return messages.reduce((count, message) => {
 		return count + (message.unread ? 1 : 0);
 	}, 0);
