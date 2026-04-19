@@ -7,14 +7,14 @@ import Image from "next/image";
 
 import styles from "./TrendingSection.module.css";
 
-import { fetchTrendingBooks } from "@/services";
+import { fetchTrendingBooksMetadata } from "@/services";
 
 import BookShowcase from "./BookShowcase";
 
 
 async function TrendingSection() {
 
-  const books = await fetchTrendingBooks();
+  const books = await fetchTrendingBooksMetadata();
 
   return (
     <section className={styles.section}>

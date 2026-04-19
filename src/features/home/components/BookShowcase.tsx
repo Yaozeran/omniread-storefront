@@ -8,10 +8,10 @@ import Image from "next/image";
 
 import styles from "./BookShowcase.module.css";
 
-import { Book } from "@/types/book";
+import { Book, BookMetadata } from "@/types/book";
 
 
-function BookShowcase({ book }: Readonly<{ book: Book; }>) {
+function BookShowcase({ book }: Readonly<{ book: BookMetadata; }>) {
 
   const href = `/book/${book.id}`;
 
@@ -20,7 +20,7 @@ function BookShowcase({ book }: Readonly<{ book: Book; }>) {
       <article key={book.id} className={styles.article}>
         <div className={styles.coverFrame}>
           <Image
-            src={book.coverImage}
+            src={book.coverImage ?? "https://via.placeholder.com/150"}
             alt={book.title}
             fill
             sizes="150px"

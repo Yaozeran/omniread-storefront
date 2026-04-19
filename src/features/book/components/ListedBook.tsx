@@ -11,7 +11,7 @@ import {
   fetchAuthorDisplayNames,
   fetchBookMetadata,
   fetchBookSaleInfo,
-  fetchPublisherDisplayNameById,
+  fetchPublisherDisplayName,
 } from "@/services/api/book";
 
 
@@ -24,7 +24,7 @@ async function ListedBook({ bookId }: Readonly<{ bookId: string }>) {
   const authorLine = authors.length > 0 ? authors.join(", ") : "Unknown Author";
 
   const publisher = metadata.publisherId
-    ? await fetchPublisherDisplayNameById(bookId, metadata.publisherId)
+    ? await fetchPublisherDisplayName(bookId, metadata.publisherId)
     : "Not published";
 
   const publishDate = metadata.publishedDate ?? "Unknown";

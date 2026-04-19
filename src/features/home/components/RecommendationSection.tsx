@@ -5,55 +5,86 @@
 
 "use client";
 
+
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import styles from "./RecommendationSection.module.css";
 
 import { useAuthContext } from "@/features/auth/context/AuthProvider";
 
-import { Book } from "@/types/book";
+import type { Book } from "@/types/book";
 
-import { fetchBooksRecommendedByUserId } from "@/services";
+import { fetchBooksRecommended } from "@/services";
 
 import BookCard from "@/features/home/components/BookCard";
 
 
 function RecommendedSection() {
 
-  const auth = useAuthContext(); 
+  const auth = useAuthContext();
 
-  const [books, setBooks] = useState<Book[]>();
+  const router = useRouter();
+
   const [loading, setLoading] = useState<boolean>(false);
-
+  const [books, setBooks] = useState<Record<string, Book>>({});
+  
   useEffect(() => {
-
-    if (!auth?.user?.id) return;
+    if (!auth.user) {
+      setLoading(false);
+      return;
+    }
+    if (!auth.user.profile) {
+      router.replace("/profile-setup");
+      return;
+    }
 
     async function loadRecommendedBooks() {
       try {
-        const data = await fetchBooksRecommendedByUserId(auth.user.id);
+        const data = await fetchBooksRecommended(auth.user.metadata.id);
         setBooks(data);
       } catch (err) {
         console.error("Failed to load recommended books", err);
+        setBooks({});
       } finally {
         setLoading(false);
       }
-    };
-
+    }
+    setLoading(true);
     loadRecommendedBooks();
 
-  }, [books])
-  
+  }, [auth.user, router]);
 
-  if (!books || books.length === 0) {
-    return null;
+  if (!auth.user) {
+    return (
+      <section className={styles.section}>
+        <h2>Login to see recommendation</h2>
+      </section>
+    );
   }
-  
+
+  if (loading) {
+    return (
+      <section className={styles.section}>
+        <h2 className={styles.heading}>Recommended</h2>
+        <p>Loading recommendations...</p>
+      </section>
+    );
+  }
+
+  if (Object.keys(books).length === 0) { 
+    return (
+      <section className={styles.section}>
+        <h2>No recommendations yet, add books to cart or start reading. </h2>
+      </section>
+    )
+  }
+
   return (
     <section className={styles.section}>
       <h2 className={styles.heading}>Recommended</h2>
       <div className={styles.scrollRow}>
-        <BookCard book={books[0]} />
+        <BookCard book={Object.values(books)[0]} />
       </div>
     </section>
   );
