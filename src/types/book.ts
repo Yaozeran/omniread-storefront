@@ -3,71 +3,73 @@
  * The book related types and interfaces. */
 
 
-import type { StaticImageData } from "next/image";
+import type { EpubIdentifier } from "@/types/epub";
 
 
-export interface Book {
-  // the ibsn of the book
-  id: number, 
+export interface BookMetadata {
+  /* identifier
+   * 
+   *   id: system unique identifier
+   *   epubIdentifier: point to epub file  */
 
-  // basic info
+  id: string, 
+  epubIdentifier?: EpubIdentifier,
+  badgeIdentifier?: string,
+
+  /* meta info 
+   * 
+   *   coverImage: url string  */
+
   title: string,
-  coverImage: string | StaticImageData,
+  coverImage?: string,
   description?: string,
   
-  authorId: number,
-  authorName: string,
+  authorIds: string[],
+  contributorIds?: string[],
 
-  publisherId: number,
-  publisherName: string,
+  publisherId?: string,
 
-  edition?: number,
-  publishDate: string,
+  edition?: string,
+  publishedDate?: string,
 
-  // series
-  seriesId?: number,
-  
-  // market info
-  paperPrice?: number,
-  digitalPrice?: number,  
-
-  isSoldOut: boolean,
+  seriesId?: string,
 }
 
 
 export interface Series {
-  id: number,
+  id: string,
 
   name: string,
+  coverImage?: string,
+  description?: string,
 
-  authorId: number,
-  authorName: string,
+  authorIds: string[],
+
+  publisherId?: string,
 }
 
 
 export interface Category {
-  id: number,
+  id: string,
+
   name: string,
-  image: string,
+  image?: string,
 }
 
 
-export interface Bookshelf {
-  books: Book[],
-  bookCategoryMap: Record<number, Category>,
+export interface BookSaleInfo {
+  paperPrice?: number,
+  paperInventory?: number,
+
+  digitalPrice?: number,
+  digitalInventory?: number,
 }
 
 
-export type SaleType = 'paper' | 'digital';
-
-
-export interface CartItem {
-  id: number,
-
-	title: string,
-  coverImage: string,
-
-	type: SaleType,
-  price: number,
-	quantity: number,
+export interface EpubSource {
+  sourcePath?: string,
+  downloadUrl?: string,
+  fileSizeBytes?: number,
+  checksum?: string,
+  drmProtected?: boolean,
 }
