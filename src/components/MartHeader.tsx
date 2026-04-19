@@ -3,11 +3,19 @@
  * The mart pages' header component. */
 
 
+"use client";
+
+
 import Link from "next/link";
+
 import styles from "./MartHeader.module.css";
+import { useAuthContext } from "@/features/auth/context/AuthProvider";
 
 
 function MartHeader() {
+
+  const auth = useAuthContext();
+
   return (
     <header className={styles.header}>
       <div className={styles.logo}>Logo</div>
@@ -18,7 +26,7 @@ function MartHeader() {
       />
       <div className={styles.linkGroup}>
         <Link href="/space" className={styles.link}>
-          User
+          {auth.user?.name ?? "User"}
         </Link>
       </div>
       <div className={styles.linkGroup}>
