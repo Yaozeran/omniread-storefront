@@ -26,7 +26,7 @@ function MartHeader() {
       />
       <div className={styles.linkGroup}>
         <Link href="/space" className={styles.link}>
-          {auth.user?.name ?? "User"}
+          {auth.user?.metadata.name ?? "User"}
         </Link>
       </div>
       <div className={styles.linkGroup}>
