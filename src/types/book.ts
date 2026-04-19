@@ -3,7 +3,7 @@
  * The book related types and interfaces. */
 
 
-import type { EpubIdentifier } from "@/types/epub";
+import type { EpubIdentifier, EpubMetadata, EpubPackage, EpubLocation } from "@/types/epub";
 
 
 export interface BookMetadata {
@@ -50,26 +50,31 @@ export interface Series {
 
 
 export interface Category {
-  id: string,
+  id: string;
 
-  name: string,
-  image?: string,
+  name: string;
+  image?: string;
 }
 
 
 export interface BookSaleInfo {
-  paperPrice?: number,
-  paperInventory?: number,
+  paperPrice?: number;
+  paperInventory?: number;
 
-  digitalPrice?: number,
-  digitalInventory?: number,
+  digitalPrice?: number;
+  digitalInventory?: number;
 }
 
 
-export interface EpubSource {
-  sourcePath?: string,
-  downloadUrl?: string,
-  fileSizeBytes?: number,
-  checksum?: string,
-  drmProtected?: boolean,
+export interface EpubInfo {
+  metadata: EpubMetadata;
+  sourcePath?: string;
+  document?: EpubPackage;
+}
+
+
+export interface Book {
+  metadata: BookMetadata;
+  saleinfo: BookSaleInfo;
+  epubinfo: EpubInfo;
 }
