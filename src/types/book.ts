@@ -69,12 +69,11 @@ export interface BookSaleInfo {
 export interface EpubInfo {
   metadata: EpubMetadata;
   sourcePath?: string;
-  document?: EpubPackage;
 }
 
 
 export interface Book {
   metadata: BookMetadata;
   saleinfo: BookSaleInfo;
-  epubinfo: EpubInfo;
+  epubinfo?: EpubInfo;
 }

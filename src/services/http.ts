@@ -3,6 +3,9 @@
  * The http api wrapper file. */
 
 
+import { getAuthorizationHeader } from "@/utils/jwt";
+
+
 /* Helper: Return the base url for the backend server */
 function getBackendBaseUrl() {
   const DEFAULT_BACKEND_URL = "http://localhost:8080";
@@ -72,14 +75,22 @@ async function fetchJson<T>(path: string, options: FetchOptions = { timeout: 100
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeout);
 
+  const headers: Record<string, string> = {
+    Accept: "application/json",
+    ...init?.headers as Record<string, string>,
+  };
+
+  // Add JWT token to Authorization header if available
+  const authHeader = getAuthorizationHeader();
+  if (authHeader) {
+    headers["Authorization"] = authHeader;
+  }
+
   const response = await fetch(parseUrl(getBackendBaseUrl(), path, query), 
     {
       ...init,
       signal: init.signal ?? controller.signal,
-      headers: {
-        Accept: "application/json",
-        ...init?.headers,
-      },
+      headers,
     }
   ).finally(() => clearTimeout(id));
 
@@ -95,6 +106,33 @@ async function fetchJson<T>(path: string, options: FetchOptions = { timeout: 100
   if (response.status === 204) { return undefined as T; }
 
   return body as T;
+}
+
+
+/* Fetch from the backend api and return the raw binary response body. */
+async function fetchBinaryResource(path: string, options: FetchOptions = { timeout: 10000 }): Promise<ArrayBuffer> {
+  const { query, timeout, ...init } = options;
+
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+
+  const response = await fetch(parseUrl(getBackendBaseUrl(), path, query),
+    {
+      ...init,
+      signal: init.signal ?? controller.signal,
+    }
+  ).finally(() => clearTimeout(id));
+
+  if (!response.ok) {
+    const body = await parseResponseBody(response);
+    throw new HttpError(
+      (body as any)?.message ?? `HTTP ${response.status}`,
+      response.status,
+      body,
+    );
+  }
+
+  return await response.arrayBuffer();
 }
 
 
@@ -128,4 +166,4 @@ const api = {
 };
 
 
-export { api, fetchJson, type FetchOptions, HttpError };
+export { api, fetchBinaryResource, fetchJson, type FetchOptions, HttpError };

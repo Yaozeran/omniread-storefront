@@ -3,24 +3,19 @@
  * The api services that fetch book data from the backend server. */
 
 
-import { Book } from "@/types/book";
+import { Book, BookMetadata, BookSaleInfo, Category } from "@/types/book";
 
 import { fetchJson } from "@/services/http";
 
 
-const sampleBooks: Book[] = [
+export const sampleBookMetadata: BookMetadata[] = [
   {
-    id: 1,
+    id: "1",
     coverImage: '/sample/cover/dune-cover.jpg',
     title: 'Dune',
-    authorId: 1,
-    authorName: 'Frank Herbert',
-    publisherId: 1,
-    publisherName: 'Chilton Books',
-    publishDate: '1965-08-01',
-    paperPrice: 18.99,
-    digitalPrice: 14.99,
-    isSoldOut: false,
+    authorIds: ["1"],
+    publisherId: "1",
+    publishedDate: '1965-08-01',
     description:
       `
       Set in the distant future amidst a feudal interstellar society in which various noble houses control planetary fiefs.
@@ -29,17 +24,12 @@ const sampleBooks: Book[] = [
       `
   },
   {
-    id: 2,
+    id: "2",
     coverImage: '/sample/cover/eminence-in-shadow-cover.jpg',
     title: 'The Eminence in Shadow',
-    authorId: 2,
-    authorName: 'Daisuke Aizawa',
-    publisherId: 2,
-    publisherName: 'Enterbrain',
-    publishDate: '2018-11-05',
-    paperPrice: 14.99,
-    digitalPrice: 9.99,
-    isSoldOut: false,
+    authorIds: ["2"],
+    publisherId: "2",
+    publishedDate: '2018-11-05',
     description:
       `
       Great accomplishments and immense power mean nothing to the men and women who pull the strings of society from the shadows.
@@ -49,17 +39,12 @@ const sampleBooks: Book[] = [
       `,
   },
   {
-    id: 3,
+    id: "3",
     coverImage: '/sample/cover/solo-leveling-cover.jpg',
     title: 'Solo Leveling',
-    authorId: 3,
-    authorName: 'Chugong',
-    publisherId: 3,
-    publisherName: 'D&C Media',
-    publishDate: '2018-07-26',
-    paperPrice: 24.99,
-    digitalPrice: 19.99,
-    isSoldOut: false,
+    authorIds: ["3"],
+    publisherId: "3",
+    publishedDate: '2018-07-26',
     description:
       `
       In a world where hunters — human warriors who possess supernatural abilities — must battle deadly monsters to protect the human race from certain annihilation.
@@ -70,17 +55,12 @@ const sampleBooks: Book[] = [
       `,
   },
   {
-    id: 4,
+    id: "4",
     coverImage: '/sample/cover/spice-and-wolf-cover.jpg',
     title: 'Spice and Wolf',
-    authorId: 4,
-    authorName: 'Isuna Hasekura',
-    publisherId: 4,
-    publisherName: 'ASCII Media Works',
-    publishDate: '2006-02-10',
-    paperPrice: 12.99,
-    digitalPrice: 8.99,
-    isSoldOut: true,
+    authorIds: ["4"],
+    publisherId: "4",
+    publishedDate: '2006-02-10',
     description:
       `
       The story revolves around Kraft Lawrence, a 25-year-old traveling merchant who peddles various goods from town to town to make a living in a stylized, fictional world with a historical setting with European influences.
@@ -90,42 +70,101 @@ const sampleBooks: Book[] = [
   },
 ];
 
+export const sampleBookSaleInfo: Record<string, BookSaleInfo> = {
+  "1": { paperPrice: 18.99, digitalPrice: 14.99, paperInventory: 12, digitalInventory: 9999 },
+  "2": { paperPrice: 14.99, digitalPrice: 9.99, paperInventory: 8, digitalInventory: 9999 },
+  "3": { paperPrice: 24.99, digitalPrice: 19.99, paperInventory: 16, digitalInventory: 9999 },
+  "4": { paperPrice: 12.99, digitalPrice: 8.99, paperInventory: 0, digitalInventory: 9999 },
+};
 
-export async function fetchBookById(bookId: number | string) {
+export const sampleAuthorInfos: Record<string, string> = {
+  "1": "Frank Herbert",
+  "2": "Daisuke Aizawa",
+  "3": "Chugong",
+  "4": "Isuna Hasekura",
+};
+
+export const samplePublisherInfos: Record<string, string> = {
+  "1": "Chilton Books",
+  "2": "Enterbrain",
+  "3": "D&C Media",
+  "4": "ASCII Media Works",
+};
+
+export const sampleCategories: Category[] = [
+  { id: "1", name: 'Fiction', image: 'https://via.placeholder.com/150' },
+  { id: "2", name: 'Non-Fiction', image: 'https://via.placeholder.com/150' },
+  { id: "3", name: 'Science', image: 'https://via.placeholder.com/150' },
+  { id: "4", name: 'History', image: 'https://via.placeholder.com/150' },
+  { id: "5", name: 'Fantasy', image: 'https://via.placeholder.com/150' },
+  { id: "6", name: 'Biography', image: 'https://via.placeholder.com/150' },
+];
+
+export const sampleBooks: Record<string, Book> = {
+  "1": { 
+    metadata: sampleBookMetadata[1],
+    saleinfo: sampleBookSaleInfo["1"],
+   },
+}
+
+
+export async function fetchBookMetadata(bookId: string): Promise<BookMetadata> {
   try {
-    const book = await fetchJson<Book>(`/books/${bookId}`);
-    return book;
+    return await fetchJson<BookMetadata>(`/books/metadata/${bookId}`);
   } catch (e) {
-    return sampleBooks[0]; // return a sample book
+    return sampleBookMetadata[0];
   }
 }
 
 
-export async function fetchBooksByCategoryName(categoryName: string) {
+export async function fetchBookSaleInfo(bookId: string): Promise<BookSaleInfo> {
   try {
-    const books = await fetchJson<Book[]>("/books", {
+    return await fetchJson<BookMetadata & BookSaleInfo>(`/books/${bookId}/saleinfo`);
+  } catch (e) {
+    return sampleBookSaleInfo["1"];
+  }
+}
+
+
+export async function fetchBook(bookId: string) {
+
+}
+
+
+export async function fetchCategories() {
+  try {
+    const categories = await fetchJson<Category[]>(`/categories`);
+    return categories;
+  } catch (e) {
+    return sampleCategories;
+  }
+}
+
+
+export async function fetchBooksByCategoryName(categoryName: string): Promise<BookMetadata[]> {
+  try {
+    return await fetchJson<BookMetadata[]>('/books', {
       query: { category: categoryName },
     });
-    return books;
   } catch (e) {
-    return sampleBooks;
+    return sampleBookMetadata;
   }
 }
 
 
-export async function fetchTrendingBooks(): Promise<Book[]> {
+export async function fetchTrendingBooksMetadata(): Promise<BookMetadata[]> {
   try {
-    const books = await fetchJson<Book[]>("/books/trending");
+    const books = await fetchJson<BookMetadata[]>('/books/trending');
     return books;
   } catch (e) {
-    return sampleBooks;
+    return sampleBookMetadata;
   }
 }
 
 
-export async function fetchBooksRecommendedByUserId(userId: string | number): Promise<Book[]> {
+export async function fetchBooksRecommended(userId: string): Promise<Record<string, Book>> {
   try {
-    const books = await fetchJson<Book[]>("/books/recommended", {
+    const books = await fetchJson<Record<string, Book>>('/books/recommended', {
       query: { userId: userId },
     });
     return books;
@@ -135,37 +174,27 @@ export async function fetchBooksRecommendedByUserId(userId: string | number): Pr
 }
 
 
-// export interface BookListParams {
-//   keyword?: string;
-//   categoryId?: number;
-//   page?: number;
-//   size?: number;
-//   sort?: string;
-// }
+export async function fetchAuthorDisplayName(bookId: string, authorId: string): Promise<string | null> {
+  try {
+    const result = await fetchJson<{ displayName: string }>(`/books/${bookId}/authors/${authorId}/display-name`);
+    return result.displayName;
+  } catch (e) {
+    return sampleAuthorInfos[String(authorId)] ?? "Unknown Author";
+  }
+}
 
 
-// function toQueryString(params: BookListParams = {}) {
-//   const searchParams = new URLSearchParams();
-
-//   Object.entries(params).forEach(([key, value]) => {
-//     if (value === undefined || value === null || value === "") {
-//       return;
-//     }
-
-//     searchParams.set(key, String(value));
-//   });
-
-//   const query = searchParams.toString();
-
-//   return query ? `?${query}` : "";
-// }
+export async function fetchAuthorDisplayNames(bookId: string, authorIds: string[]): Promise<string[]> {
+  const names = await Promise.all(authorIds.map((authorId) => fetchAuthorDisplayName(bookId, authorId)));
+  return names.filter((name): name is string => Boolean(name && name.trim().length > 0));
+}
 
 
-// export async function fetchBooks(params: BookListParams = {}) {
-//   return fetchJson<Book[]>(`/books${toQueryString(params)}`);
-// }
-
-
-// export async function searchBooks(keyword: string, params: Omit<BookListParams, "keyword"> = {}) {
-//   return fetchJson<Book[]>(`/books/search${toQueryString({ ...params, keyword })}`);
-// }
+export async function fetchPublisherDisplayName(bookId: string, publisherId: string): Promise<string | null> {
+  try {
+    const result = await fetchJson<{ displayName: string }>(`/books/${bookId}/publisher/${publisherId}/display-name`);
+    return result.displayName;
+  } catch (e) {
+    return samplePublisherInfos[String(publisherId)] ?? "Unknown Publisher";
+  }
+}
