@@ -12,27 +12,29 @@ export interface BookMetadata {
    *   id: system unique identifier
    *   epubIdentifier: point to epub file  */
 
-  id: string, 
-  epubIdentifier?: EpubIdentifier,
-  badgeIdentifier?: string,
+  id: string;
+  epubIdentifier?: EpubIdentifier;
+  badgeIdentifier?: string;
 
   /* meta info 
    * 
    *   coverImage: url string  */
 
-  title: string,
-  coverImage?: string,
-  description?: string,
+  title: string;
+  coverImage?: string;
+  description?: string;
+  edition?: string;
   
-  authorIds: string[],
-  contributorIds?: string[],
+  authorIds: string[];
+  contributorIds?: string[];
 
-  publisherId?: string,
+  /* a book may not be published
+   * 
+   *   so it does not have a physcial form existing yet  */
+  publisherId?: string;
+  publishedDate?: string;
 
-  edition?: string,
-  publishedDate?: string,
-
-  seriesId?: string,
+  seriesId?: string;
 }
 
 
