@@ -190,7 +190,8 @@ export async function fetchAuthorDisplayNames(bookId: string, authorIds: string[
 }
 
 
-export async function fetchPublisherDisplayName(bookId: string, publisherId: string): Promise<string | null> {
+export async function fetchPublisherDisplayName(bookId: string, publisherId: string): Promise<string> {
+  
   try {
     const result = await fetchJson<{ displayName: string }>(`/books/${bookId}/publisher/${publisherId}/display-name`);
     return result.displayName;

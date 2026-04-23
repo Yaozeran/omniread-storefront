@@ -5,7 +5,7 @@
 
 import { api, fetchJson } from "@/services/http";
 
-import { MailMessage } from "@/types/space";
+import { BookReview, MailMessage } from "@/types/space";
 import { Book, BookMetadata } from "@/types/book";
 
 
@@ -42,6 +42,45 @@ import { sampleBooks } from "./book";
 const sampleRecentReadsIds: string[] = [
 	"1", "2"
 ]
+
+const samplePosts: BookReview[] = [
+		{
+			id: "1",
+			writerId: "reader-001",
+			bookId: "1",
+			rating: 5,
+			content:
+				"Worldbuilding stays sharp the entire way through. The political tension feels deliberate and the pacing lands well once the plot starts moving.",
+			views: 124,
+			likes: 38,
+			dislikes: 2,
+			date: "2 hours ago",
+		},
+		{
+			id: "2",
+			writerId: "reader-001",
+			bookId: "2",
+			rating: 4,
+			content:
+				"A quieter read with a strong conversational rhythm. The trade-focused setup makes the relationship scenes feel even more grounded.",
+			views: 91,
+			likes: 27,
+			dislikes: 1,
+			date: "Yesterday",
+		},
+		{
+			id: "3",
+			writerId: "reader-001",
+			bookId: "3",
+			rating: 5,
+			content:
+				"Big momentum, clean escalation, and a satisfying power fantasy structure. It is easy to keep turning pages once it gets going.",
+			views: 203,
+			likes: 62,
+			dislikes: 4,
+			date: "3 days ago",
+		},
+];
 
 
 export async function fetchUserMails(userId: string) {
